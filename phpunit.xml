@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Application Test Suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+
+   <coverage>
+      <include>
+          <file>app/Http/Controllers/nameParserController.php</file>
+          <file>app/nameParser/nameParser.php</file>
+      </include>
+   </coverage>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+    </php>
+
+</phpunit>
+
+
+ <!--<logging>
+    <log type="coverage-html" target="build/report" charset="UTF-8"
+      highlight="false" lowUpperBound="35"  highUpperBound="70" />
+      <log type="testdox-html" target="html/index.html" />
+  </logging> 
+   -->
