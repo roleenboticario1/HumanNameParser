@@ -17,7 +17,7 @@
 */
 
 
-$router->get('/', function () use ($router) {
+$router->get('/human-name-parser', function () use ($router) {
     return $router->app->version();
 });
 
