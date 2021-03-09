@@ -11,20 +11,20 @@ use DB;
 
 class TransactionController extends Controller
 {
-	public function getAllTravelers(Request $request)
+	public function getUsersProfile(Request $request)
 	{
-	    $start    = Carbon::parse($request->date_from)->format('Y-m-d');
-	    $end      = Carbon::parse($request->date_to)->format('Y-m-d');
-	    $offset   = $request->input('offset');
-	    $limit    = $request->input('limit');
+	    $start    =  Carbon::parse($request->date_from)->format('Y-m-d');
+	    $end      =  Carbon::parse($request->date_to)->format('Y-m-d');
+	    $offset   =  $request->input('offset');
+	    $limit    =  $request->input('limit');
 
 	    if ($limit > 1000) {
 	      return response()->json(["message" => "Request Failed."]);
 	    }
 
 	    $data = DB::table('travels')
-	      ->whereDate('travels.created_at', '>=', $start)
-	      ->WhereDate('travels.created_at', '<=', $end)
+	      ->whereDate('travels.travels_date_of_visit', '>=', $start)
+	      ->WhereDate('travels.travels_date_of_visit', '<=', $end)
 	      ->join('profiles', 'travels.profile_id', '=', 'profiles.id')
 	      ->join('passports', 'travels.profile_id', '=', 'passports.id')
 	      ->select('travels.*','profiles.*','passports.*')
@@ -32,8 +32,44 @@ class TransactionController extends Controller
 	      ->offset($offset)->limit($limit)->get();
 
 	    return $data;
-
 	}
+
+	public function getTotalCount(Request $request)
+    {
+       
+        $start = Carbon::parse($request->date_from)->format('Y-m-d');
+	    $end   = Carbon::parse($request->date_to)->format('Y-m-d');
+
+        $total = Db::table('travels')
+          ->whereDate('travels.travels_date_of_visit', '>=', $start)
+          ->whereDate('travels.travels_date_of_visit', '<=', $end)
+          ->join('profiles','travels.profile_id','=','profiles.id')
+          ->select(('travels.travels_activity AS ACTIVITY'), DB::raw('COUNT(travels.travels_date_of_visit) AS COUNT'))
+          ->groupBy('ACTIVITY')
+          ->get();
+
+        $total_output = [];
+        foreach ($total as $entry) {
+             $total_output[$entry->ACTIVITY] = $entry->COUNT;
+        }
+
+	    $daily = Db::table('travels')
+	      ->whereDate('travels.travels_date_of_visit', '>=', $start)
+          ->whereDate('travels.travels_date_of_visit', '<=', $end)
+          ->join('profiles','travels.profile_id','=','profiles.id')
+          ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), ('travels.travels_activity AS ACTIVITY'), DB::raw('COUNT(profiles.profile_gender) AS COUNT'))
+          ->groupBy('DATE','ACTIVITY')
+          ->orderBy('travels.travels_date_of_visit', 'DESC')
+          ->get();
+
+	    $daily_output = [];
+	    foreach ($daily as $entry) {
+	         $daily_output[$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
+	    }
+
+        return response()->json(["activity" => $total_output , "daily"=> $daily_output ]);
+	}
+
 	
     public function getTotalCountByGender(Request $request)
     {
@@ -58,22 +94,20 @@ class TransactionController extends Controller
 	      ->whereDate('travels.travels_date_of_visit', '>=', $start)
           ->whereDate('travels.travels_date_of_visit', '<=', $end)
           ->join('profiles','travels.profile_id','=','profiles.id')
-          ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), ('profiles.profile_gender as GENDER'), DB::raw('COUNT(profiles.profile_gender) AS COUNT'))
-          ->groupBy('DATE','GENDER')
+          ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), ('travels.travels_activity AS ACTIVITY'), ('profiles.profile_gender as GENDER'), DB::raw('COUNT(profiles.profile_gender) AS COUNT'))
+          ->groupBy('DATE','GENDER','ACTIVITY')
           ->orderBy('travels.travels_date_of_visit', 'DESC')
           ->get();
 
 	    $daily_output = [];
 	    foreach ($daily as $entry) {
-	         $daily_output[$entry->DATE][$entry->GENDER] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->GENDER] = $entry->COUNT;
 	    }
 
-	    return response()->json(["activity" => $total_output , "daily"=> $daily_output ]);
-
+        return response()->json(["activity" => $total_output , "daily"=> $daily_output ]);
 	}
-
-
-    public function getTotalCountByCountry(Request $request)
+  
+    public function getTotalCountByNationality(Request $request)
     {
        
         $start = Carbon::parse($request->date_from)->format('Y-m-d');
@@ -83,31 +117,67 @@ class TransactionController extends Controller
           ->whereDate('travels.travels_date_of_visit', '>=', $start)
           ->whereDate('travels.travels_date_of_visit', '<=', $end)
           ->join('profiles','travels.profile_id','=','profiles.id')
-          ->select(('profiles.profile_country AS  COUNTRY'), ('travels.travels_activity AS ACTIVITY'), DB::raw('COUNT(profiles.profile_country) AS COUNT'))
-          ->groupBy('COUNTRY','ACTIVITY')
+          ->select(('profiles.profile_nationality AS  NATIONALITY'), ('travels.travels_activity AS ACTIVITY'), DB::raw('COUNT(profiles.profile_nationality) AS COUNT'))
+          ->groupBy('NATIONALITY','ACTIVITY')
           ->get();
 
          $total_output = [];
          foreach ($total as $entry) {
-             $total_output[$entry->ACTIVITY][$entry->COUNTRY] = $entry->COUNT;
+             $total_output[$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
         }
 
 	    $daily = Db::table('travels')
 	      ->whereDate('travels.travels_date_of_visit', '>=', $start)
           ->whereDate('travels.travels_date_of_visit', '<=', $end)
           ->join('profiles','travels.profile_id','=','profiles.id')
-          ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), ('profiles.profile_country AS  COUNTRY'), DB::raw('COUNT(profiles.profile_country) AS COUNT'))
-          ->groupBy('DATE','COUNTRY')
+          ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), ('travels.travels_activity AS ACTIVITY'),('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(profiles.profile_nationality) AS COUNT'))
+          ->groupBy('DATE','NATIONALITY','ACTIVITY')
           ->orderBy('travels.travels_date_of_visit', 'DESC')
           ->get();
 
 	    $daily_output = [];
 	    foreach ($daily as $entry) {
-	         $daily_output[$entry->DATE][$entry->COUNTRY] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
 	    }
 
 	    return response()->json(["activity" => $total_output, "daily"=> $daily_output]);
+	}
 
+
+    public function getTotalCountgenderByNationality(Request $request)
+    {
+       
+        $start = Carbon::parse($request->date_from)->format('Y-m-d');
+	    $end   = Carbon::parse($request->date_to)->format('Y-m-d');
+
+        $total = Db::table('travels')
+          ->whereDate('travels.travels_date_of_visit', '>=', $start)
+          ->whereDate('travels.travels_date_of_visit', '<=', $end)
+          ->join('profiles','travels.profile_id','=','profiles.id')
+          ->select(('profiles.profile_nationality AS  NATIONALITY'), ('travels.travels_activity AS ACTIVITY'),('profiles.profile_gender as GENDER'), DB::raw('COUNT(profiles.profile_nationality) AS COUNT'))
+          ->groupBy('NATIONALITY','ACTIVITY','GENDER')
+          ->get();
+
+         $total_output = [];
+         foreach ($total as $entry) {
+             $total_output[$entry->ACTIVITY][$entry->GENDER][$entry->NATIONALITY] = $entry->COUNT;
+        }
+
+	    $daily = Db::table('travels')
+	      ->whereDate('travels.travels_date_of_visit', '>=', $start)
+          ->whereDate('travels.travels_date_of_visit', '<=', $end)
+          ->join('profiles','travels.profile_id','=','profiles.id')
+          ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), ('travels.travels_activity AS ACTIVITY'),('profiles.profile_gender as GENDER'),('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(profiles.profile_nationality) AS COUNT'))
+          ->groupBy('DATE','NATIONALITY','ACTIVITY','GENDER')
+          ->orderBy('travels.travels_date_of_visit', 'DESC')
+          ->get();
+
+	    $daily_output = [];
+	    foreach ($daily as $entry) {
+	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->GENDER][$entry->NATIONALITY] = $entry->COUNT;
+	    }
+
+	    return response()->json(["activity" => $total_output, "daily"=> $daily_output]);
 	}
 
 	public function getTotalCountOfTravelsPortOfEntry(Request $request)
@@ -143,7 +213,6 @@ class TransactionController extends Controller
 	    }
 
 	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
-
 	}
 
 
@@ -202,15 +271,15 @@ class TransactionController extends Controller
 	          WHEN profiles.profile_age > 30 AND profiles.profile_age < 49 THEN "30-49"
 	          WHEN profiles.profile_age > 50 AND profiles.profile_age < 59 THEN "50-59" 
 	          WHEN profiles.profile_age > 60 THEN "ABOVE 60"  
-	          END AS ages'), DB::raw('COUNT(profiles.profile_age) AS AGE'))
-	       ->groupBy('ages')
-	       ->orderBy('ages', 'ASC')
+	          END AS ages'), ('travels.travels_activity AS ACTIVITY'),DB::raw('COUNT(profiles.profile_age) AS AGE'))
+	       ->groupBy('ages','ACTIVITY')
+	       ->orderBy('ages', 'DESC')
 	       // ->offset($offset)->limit($limit)
 	       ->get();
 
 	    $total_output = [];
 	    foreach ($total as $entry) {
-	        $total_output[$entry->ages] = $entry->AGE;
+	        $total_output[$entry->ACTIVITY][$entry->ages]= $entry->AGE;
 	    }
 
 	    $total_daily = Db::table('travels')
@@ -223,15 +292,68 @@ class TransactionController extends Controller
 	          WHEN profiles.profile_age > 30 AND profiles.profile_age < 49 THEN "30-49"
 	          WHEN profiles.profile_age > 50 AND profiles.profile_age < 59 THEN "50-59" 
 	          WHEN profiles.profile_age > 60 THEN "ABOVE 60"  
-	          END AS ages'), DB::raw('COUNT(profiles.profile_age) AS AGE'))
-	       ->groupBy('DATE','ages')
+	          END AS ages'),('travels.travels_activity AS ACTIVITY'), DB::raw('COUNT(profiles.profile_age) AS AGE'))
+	       ->groupBy('DATE','ages','ACTIVITY')
 	       ->orderBy('travels.travels_date_of_visit', 'DESC')
 	       // ->offset($offset)->limit($limit)
 	       ->get();
 
 	    $daily_output = [];
 	    foreach ( $total_daily as $entry) {
-	        $daily_output[$entry->DATE][$entry->ages] = $entry->AGE;
+	        $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->ages] = $entry->AGE;
+	    }
+	    
+	    return response()->json(["total" => $total_output, 'daily'=>$daily_output]);
+	}
+
+	public function getTotalCountGenderByAge(Request $request)
+	{
+
+	    $start = Carbon::parse($request->date_from)->format('Y-m-d');
+	    $end = Carbon::parse($request->date_to)->format('Y-m-d');
+	    // $offset   = $request->input('offset');
+	    // $limit    = $request->input('limit');
+	    
+	    $total = Db::table('travels')
+	       ->whereDate('travels.travels_date_of_visit', '>=', $start)
+	       ->whereDate('travels.travels_date_of_visit', '<=', $end)
+	       ->join('profiles','travels.profile_id','profiles.id')
+	       ->select(DB::raw('CASE 
+	          WHEN profiles.profile_age <= 17 THEN "Below 18" 
+	          WHEN profiles.profile_age >= 18 AND profiles.profile_age < 29 THEN "18-29" 
+	          WHEN profiles.profile_age > 30 AND profiles.profile_age < 49 THEN "30-49"
+	          WHEN profiles.profile_age > 50 AND profiles.profile_age < 59 THEN "50-59" 
+	          WHEN profiles.profile_age > 60 THEN "ABOVE 60"  
+	          END AS ages'), ('travels.travels_activity AS ACTIVITY'),('profiles.profile_gender as GENDER'),DB::raw('COUNT(profiles.profile_age) AS AGE'))
+	       ->groupBy('ages','ACTIVITY','GENDER')
+	       ->orderBy('ages', 'DESC')
+	       // ->offset($offset)->limit($limit)
+	       ->get();
+
+	    $total_output = [];
+	    foreach ($total as $entry) {
+	        $total_output[$entry->ACTIVITY][$entry->GENDER][$entry->ages]= $entry->AGE;
+	    }
+
+	    $total_daily = Db::table('travels')
+	       ->whereDate('travels.travels_date_of_visit', '>=', $start)
+	       ->whereDate('travels.travels_date_of_visit', '<=', $end)
+	       ->join('profiles','travels.profile_id','profiles.id')
+	       ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), DB::raw('CASE 
+	          WHEN profiles.profile_age <= 17 THEN "Below 18" 
+	          WHEN profiles.profile_age >= 18 AND profiles.profile_age < 29 THEN "18-29" 
+	          WHEN profiles.profile_age > 30 AND profiles.profile_age < 49 THEN "30-49"
+	          WHEN profiles.profile_age > 50 AND profiles.profile_age < 59 THEN "50-59" 
+	          WHEN profiles.profile_age > 60 THEN "ABOVE 60"  
+	          END AS ages'),('travels.travels_activity AS ACTIVITY'),('profiles.profile_gender as GENDER'), DB::raw('COUNT(profiles.profile_age) AS AGE'))
+	       ->groupBy('DATE','ages','ACTIVITY','GENDER')
+	       ->orderBy('travels.travels_date_of_visit', 'DESC')
+	       // ->offset($offset)->limit($limit)
+	       ->get();
+
+	    $daily_output = [];
+	    foreach ( $total_daily as $entry) {
+	        $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->GENDER][$entry->ages] = $entry->AGE;
 	    }
 	    
 	    return response()->json(["total" => $total_output, 'daily'=>$daily_output]);
