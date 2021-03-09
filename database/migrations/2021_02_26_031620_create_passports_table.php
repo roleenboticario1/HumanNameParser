@@ -16,11 +16,12 @@ class CreatePassportsTable extends Migration
         Schema::create('passports', function (Blueprint $table) {
             $table->id();
             $table->integer('profile_id');
+            $table->integer('passport_id');
             $table->string('passport_type');
-            $table->string('country_code');
+            $table->string('passport_country_code');
             $table->string('passport_no');
-            $table->date('issue_date');
-            $table->date('expiration_date');
+            $table->date('passport_issue_date');
+            $table->date('passport_expiration_date');
             $table->timestamps();
         });
     }

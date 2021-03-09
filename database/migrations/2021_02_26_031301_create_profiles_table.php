@@ -15,26 +15,27 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('middlename');
-            $table->string('lastname');
-            $table->string('gender');
-            $table->string('address1');
-            $table->string('address2');
-            $table->string('address3');
-            $table->string('address4');
-            $table->string('suburd');
-            $table->string('state');
-            $table->string('country');
-            $table->string('postcode');
-            $table->date('birthdate');
-            $table->string('mobilenumber');
-            $table->string('phone1');
-            $table->string('phone2');
-            $table->string('nationality');
-            $table->string('birthplace');
-            $table->string('person_of_ineterest');
-            $table->string('flags');
+            $table->integer('profile_id');
+            $table->string('profile_firstname');
+            $table->string('profile_middlename');
+            $table->string('profile_lastname');
+            $table->string('profile_gender');
+            $table->string('profile_address1');
+            $table->string('profile_address2');
+            $table->string('profile_address3');
+            $table->string('profile_address4');
+            $table->string('profile_subburd');
+            $table->string('profile_state');
+            $table->string('profile_country');
+            $table->string('profile_postcode');
+            $table->date('profile_birthdate');
+            $table->string('profile_mobile_number');
+            $table->string('profile_phone1');
+            $table->string('profile_phone2');
+            $table->string('profile_nationality');
+            $table->string('profile_birthplace');
+            $table->string('profile_person_of_ineterest');
+            $table->string('profile_flags');
             $table->timestamps();
         });
     }

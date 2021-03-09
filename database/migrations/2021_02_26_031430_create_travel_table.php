@@ -17,15 +17,16 @@ class CreateTravelTable extends Migration
             $table->id();
             $table->integer('profile_id');
             $table->integer('passport_id');
-            $table->string('activity');
-            $table->string('port_of_entry');
-            $table->string('port_of_exit');
-            $table->text('purpose_of_visit');
-            $table->string('length_of_stay');
-            $table->date('date_of_visit');
-            $table->string('airline');
-            $table->integer('flight_no');
-            $table->timestamps()
+            $table->string('travels_activity');
+            $table->string('travels_port_of_entry');
+            $table->string('travels_port_of_exit');
+            $table->text('travels_purpose_of_visit');
+            $table->string('travels_length_of_stay');
+            $table->date('travels_date_of_visit');
+            $table->string('travels_airline');
+            $table->string('travels_flight_no');
+            $table->string('travels_notes');
+            $table->timestamps();
         });
     }
 
