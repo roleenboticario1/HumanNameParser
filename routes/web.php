@@ -23,3 +23,16 @@ $router->get('/', function () use ($router) {
 
 $router->post('inputFullname','nameParserController@inputFullname');
 $router->post('showPayload','nameParserController@showPayload');
+
+$router->post('get-all-travelers','TransactionController@getAllTravelers');
+
+$router->post('get-total-count-by-gender','TransactionController@getTotalCountByGender');
+
+$router->post('get-total-count-by-country','TransactionController@getTotalCountByCountry');
+
+$router->post('get-total-count-of-travels-port-of-entry','TransactionController@getTotalCountOfTravelsPortOfEntry');
+
+$router->post('get-total-count-of-travels-port-of-exit','TransactionController@getTotalCountOfTravelsPortOfExit');
+
+$router->post('get-total-count-by-age','TransactionController@getTotalCountByAge');
+
