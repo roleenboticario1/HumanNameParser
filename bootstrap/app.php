@@ -83,6 +83,7 @@ $app->configure('nameParser');
  $app->middleware([
     App\Http\Middleware\CORSMidlleware::class
 ]);
+ 
 $app->routeMiddleware([
      'jwt' => App\Http\Middleware\JwtMiddleware::class,    
 ]);

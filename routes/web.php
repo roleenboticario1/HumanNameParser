@@ -17,12 +17,9 @@
 */
 
 
-$router->get('/human-name-parser', function () use ($router) {
+$router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/inputFullname','nameParserController@inputFullname');
-$router->post('/showPayload','nameParserController@showPayload');
-
-
-
+$router->post('inputFullname','nameParserController@inputFullname');
+$router->post('showPayload','nameParserController@showPayload');
