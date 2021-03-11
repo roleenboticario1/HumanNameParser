@@ -11,28 +11,28 @@ use DB;
 
 class TransactionController extends Controller
 {
-	public function getUsersProfile(Request $request)
-	{
-	    $start    =  Carbon::parse($request->date_from)->format('Y-m-d');
-	    $end      =  Carbon::parse($request->date_to)->format('Y-m-d');
-	    $offset   =  $request->input('offset');
-	    $limit    =  $request->input('limit');
+	// public function getUsersProfile(Request $request)
+	// {
+	//     $start    =  Carbon::parse($request->date_from)->format('Y-m-d');
+	//     $end      =  Carbon::parse($request->date_to)->format('Y-m-d');
+	//     $offset   =  $request->input('offset');
+	//     $limit    =  $request->input('limit');
 
-	    if ($limit > 1000) {
-	      return response()->json(["message" => "Request Failed."]);
-	    }
+	//     if ($limit > 1000) {
+	//       return response()->json(["message" => "Request Failed."]);
+	//     }
 
-	    $data = DB::table('travels')
-	      ->whereDate('travels.travels_date_of_visit', '>=', $start)
-	      ->WhereDate('travels.travels_date_of_visit', '<=', $end)
-	      ->join('profiles', 'travels.profile_id', '=', 'profiles.profile_id')
-	      ->join('passports', 'travels.profile_id', '=', 'passports.profile_id')
-	      ->select('travels.*','profiles.*','passports.*')
-	      ->orderBy('travels.created_at', 'DESC')
-	      ->offset($offset)->limit($limit)->get();
+	//     $data = DB::table('travels')
+	//       ->whereDate('travels.travels_date_of_visit', '>=', $start)
+	//       ->WhereDate('travels.travels_date_of_visit', '<=', $end)
+	//       ->join('profiles', 'travels.profile_id', '=', 'profiles.profile_id')
+	//       ->join('passports', 'travels.profile_id', '=', 'passports.profile_id')
+	//       ->select('travels.*','profiles.*','passports.*')
+	//       ->orderBy('travels.created_at', 'DESC')
+	//       ->offset($offset)->limit($limit)->get();
 
-	     return response()->json(["result" => $data]);
-	}
+	//      return response()->json(["result" => $data]);
+	// }
 
 	public function getTotalCount(Request $request)
   {
