@@ -101,7 +101,7 @@ class TransactionController extends Controller
       
 	    $daily_output = [];
 	    foreach ($daily as $key=> $entry) {
-	        $daily_output[$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER] = $entry->COUNT;
+	        $daily_output[$key]['date'][$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER] = $entry->COUNT;
         
 	    }
 
