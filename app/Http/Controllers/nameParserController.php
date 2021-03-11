@@ -20,7 +20,9 @@ class nameParserController extends Controller
         try{
 	        $token = $request->bearerToken();
 	        $client = new \GuzzleHttp\Client(); 
-		    $response = $client->request('POST', 'http://52.77.208.128:3000/oauth/checkToken', [
+
+
+		    $response = $client->request('POST', env('CHECK_TOKEN'), [
 		      'headers' =>  [
 		          'Authorization' => 'Bearer '.$token,
 		          'Content-Type' => 'application/x-www-form-urlencoded',

@@ -102,9 +102,11 @@ class TransactionController extends Controller
 	    $daily_output = [];
 	    foreach ($daily as $key=> $entry) {
 	        $daily_output[$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER] = $entry->COUNT;
+        
 	    }
 
-      return response()->json(["activity" => $total_output, "daily"=> [$daily_output]]);
+     
+      return response()->json(["activity" => $total_output, "daily"=> [$daily_output] ]);
 	}
 
   
