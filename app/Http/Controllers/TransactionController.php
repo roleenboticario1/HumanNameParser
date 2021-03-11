@@ -31,7 +31,7 @@ class TransactionController extends Controller
 	      ->orderBy('travels.created_at', 'DESC')
 	      ->offset($offset)->limit($limit)->get();
 
-	    return $data;
+	     return response()->json(["result" => $data]);
 	}
 
 	public function getTotalCount(Request $request)
@@ -141,7 +141,7 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
 	    }
 
-	    return response()->json(["activity" => $total_output, "daily"=> $daily_output]);
+	    return response()->json(["activity" => $total_output, "daily"=> [$daily_output]]);
 	}
 
 
@@ -213,7 +213,7 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
-	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
+	    return response()->json(["total" => $total_output, "daily"=> [$daily_output]]);
 	}
 
 	public function getTotalCountGenderOfTravelsPortOfEntry(Request $request)
@@ -285,7 +285,7 @@ class TransactionController extends Controller
 	       $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
-	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
+	    return response()->json(["total" => $total_output, "daily"=> [$daily_output]]);
 	}
 
 	public function getTotalCounGendertOfTravelsPortOfExit(Request $request)
