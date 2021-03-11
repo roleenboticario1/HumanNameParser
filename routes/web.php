@@ -24,7 +24,7 @@ $router->get('/', function () use ($router) {
 $router->post('inputFullname','nameParserController@inputFullname');
 $router->post('showPayload','nameParserController@showPayload');
 
-$router->post('get-users-profile','TransactionController@getUsersProfile');
+// $router->post('get-users-profile','TransactionController@getUsersProfile');
 
 //Total Count of Entry and Exit
 $router->post('get-total-count','TransactionController@getTotalCount');
