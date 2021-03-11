@@ -64,7 +64,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $entry) {
-	         $daily_output["date ".$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
 	    }
       
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
