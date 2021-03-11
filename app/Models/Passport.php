@@ -9,14 +9,14 @@ class Passport extends Model
     protected $table = 'passports';
 
     protected $fillable = [
-       'profile_id', 'passport_id', 'passport_type','passport_country_code', 'passport_no', 'passport_issue_date', 'passport_expiration_date'
+       'passport_type','passport_country_code', 'passport_no', 'passport_issue_date', 'passport_expiration_date'
     ];
 
     
-    public function profile()
-    {
-    	return $this->belongsTo(Profile::class);
-    }
+    // public function profile()
+    // {
+    // 	return $this->belongsTo(Profile::class);
+    // }
 }
 
 

@@ -27,28 +27,22 @@ $router->post('showPayload','nameParserController@showPayload');
 $router->post('get-users-profile','TransactionController@getUsersProfile');
 
 //Total Count of Entry and Exit
-
 $router->post('get-total-count','TransactionController@getTotalCount');
-
 $router->post('get-total-count-by-nationality','TransactionController@getTotalCountByNationality');
-
-$router->post('get-total-count-by-age','TransactionController@getTotalCountByAge');
+// $router->post('get-total-count-by-age','TransactionController@getTotalCountByAge');
+$router->post('get-total-count-of-travels-port-of-entry','TransactionController@getTotalCountOfTravelsPortOfEntry');
+$router->post('get-total-count-of-travels-port-of-exit','TransactionController@getTotalCountOfTravelsPortOfExit');
 
 
 //Total Count of Entry and Exit With Gender
-
 $router->post('get-total-count-by-gender','TransactionController@getTotalCountByGender');
-
 $router->post('get-total-count-gender-by-nationality','TransactionController@getTotalCountgenderByNationality');
+// $router->post('get-total-count-gender-by-age','TransactionController@getTotalCountGenderByAge');
+$router->post('get-total-count-gender-of-travels-port-of-entry','TransactionController@getTotalCountGenderOfTravelsPortOfEntry');
+$router->post('get-total-count-gender-of-travels-port-of-exit','TransactionController@getTotalCounGendertOfTravelsPortOfExit');
 
-$router->post('get-total-count-gender-by-age','TransactionController@getTotalCountGenderByAge');
 
 
-//Total Count  of entrants to the entry port
-$router->post('get-total-count-of-travels-port-of-entry','TransactionController@getTotalCountOfTravelsPortOfEntry');
-
-//Total Count  of entrants to the entry port
-$router->post('get-total-count-of-travels-port-of-exit','TransactionController@getTotalCountOfTravelsPortOfExit');
 
 
 
