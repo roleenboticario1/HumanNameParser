@@ -44,8 +44,13 @@ class TransactionController extends Controller
 	    foreach ($daily as $key => $entry) {
 	         $daily_output[$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
 	    }
+
+        $results = [
+          'date' => $daily_output 
+      ];
+
       
-      return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
+      return response()->json(["activity" =>$total_output , "daily"=>[$results]]);
 	}
 
 	
@@ -83,8 +88,11 @@ class TransactionController extends Controller
         
 	    }
 
-     
-      return response()->json(["activity" => $total_output, "daily"=> [$daily_output] ]);
+      $results = [
+          'date' => $daily_output 
+      ];
+       
+      return response()->json(["activity" => $total_output, "daily"=> [ $results] ]);
 	}
 
   
@@ -121,7 +129,12 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
 	    }
 
-	    return response()->json(["activity" => $total_output, "daily"=> [$daily_output]]);
+      $results = [
+        'date' => $daily_output 
+      ];
+
+
+	    return response()->json(["activity" => $total_output, "daily"=> [$results ]]);
 	}
 
 
@@ -158,7 +171,11 @@ class TransactionController extends Controller
          $daily_output[$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER][$entry->NATIONALITY] = $entry->COUNT;
       }
 
-      return response()->json(["activity" => $total_output, "daily"=> $daily_output]);
+          $results = [
+          'date' => $daily_output 
+      ];
+
+      return response()->json(["activity" => $total_output, "daily"=> [$results] ]);
 	}
 
 	public function getTotalCountOfTravelsPortOfEntry(Request $request)
@@ -193,7 +210,13 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
-	    return response()->json(["total" => $total_output, "daily"=> [$daily_output]]);
+      
+      $results = [
+          'date' => $daily_output 
+      ];
+
+
+	    return response()->json(["total" => $total_output, "daily"=> [$results]]);
 	}
 
 	public function getTotalCountGenderOfTravelsPortOfEntry(Request $request)
@@ -228,7 +251,12 @@ class TransactionController extends Controller
 	       $daily_output[$entry->DATE][$entry->NAME][" ".$entry->GENDER] = $entry->COUNT;
 	    }
 
-	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
+       $results = [
+          'date' => $daily_output 
+      ];
+
+
+	    return response()->json(["total" => $total_output, "daily"=> [$results]]);
 	}
 
 
@@ -265,7 +293,12 @@ class TransactionController extends Controller
 	       $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
-	    return response()->json(["total" => $total_output, "daily"=> [$daily_output]]);
+         $results = [
+          'date' => $daily_output 
+      ];
+
+
+	    return response()->json(["total" => $total_output, "daily"=> [$results]]);
 	}
 
 	public function getTotalCounGendertOfTravelsPortOfExit(Request $request)
@@ -301,6 +334,10 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->NAME][" ".$entry->GENDER] = $entry->COUNT;
 	    }
 
-	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
+        $results = [
+          'date' => $daily_output 
+      ];
+
+	    return response()->json(["total" => $total_output, "daily"=>  [$results]]);
 	}
 }
