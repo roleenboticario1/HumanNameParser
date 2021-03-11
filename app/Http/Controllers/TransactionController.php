@@ -324,7 +324,7 @@ class TransactionController extends Controller
 	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
 	}
 
-	// public function getTotalCountByAge(Request $request)
+	//public function getTotalCountByAge(Request $request)
 	// {
 
 	//     $start = Carbon::parse($request->date_from)->format('Y-m-d');
