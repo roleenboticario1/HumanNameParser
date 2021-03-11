@@ -42,7 +42,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $key => $entry) {
-	         $daily_output[$key]['date'][$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
 	    }
       
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
@@ -79,7 +79,7 @@ class TransactionController extends Controller
       
 	    $daily_output = [];
 	    foreach ($daily as $key => $entry) {
-	        $daily_output[$key]['date'][$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER] = $entry->COUNT;
+	        $daily_output[$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER] = $entry->COUNT;
         
 	    }
 
@@ -118,7 +118,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $key => $entry) {
-	         $daily_output[$key]['date'][$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
 	    }
 
 	    return response()->json(["activity" => $total_output, "daily"=> [$daily_output]]);
@@ -155,7 +155,7 @@ class TransactionController extends Controller
 
       $daily_output = [];
       foreach ($daily as $key =>  $entry) {
-         $daily_output[$key]['date'][$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER][$entry->NATIONALITY] = $entry->COUNT;
+         $daily_output[$entry->DATE][$entry->ACTIVITY][" ".$entry->GENDER][$entry->NATIONALITY] = $entry->COUNT;
       }
 
       return response()->json(["activity" => $total_output, "daily"=> $daily_output]);
@@ -190,7 +190,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $key =>  $entry) {
-	         $daily_output[$key]['date'][$entry->DATE][$entry->NAME] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
 	    return response()->json(["total" => $total_output, "daily"=> [$daily_output]]);
@@ -225,7 +225,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $key => $entry) {
-	       $daily_output[$key]['date'][$entry->DATE][$entry->NAME][" ".$entry->GENDER] = $entry->COUNT;
+	       $daily_output[$entry->DATE][$entry->NAME][" ".$entry->GENDER] = $entry->COUNT;
 	    }
 
 	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
@@ -262,7 +262,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $key => $entry) {
-	       $daily_output[$key]['date'][$entry->DATE][$entry->NAME] = $entry->COUNT;
+	       $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
 	    return response()->json(["total" => $total_output, "daily"=> [$daily_output]]);
@@ -298,7 +298,7 @@ class TransactionController extends Controller
 
 	    $daily_output = [];
 	    foreach ($daily as $key=> $entry) {
-	         $daily_output[$key]['date'][$entry->DATE][$entry->NAME][" ".$entry->GENDER] = $entry->COUNT;
+	         $daily_output[$entry->DATE][$entry->NAME][" ".$entry->GENDER] = $entry->COUNT;
 	    }
 
 	    return response()->json(["total" => $total_output, "daily"=> $daily_output]);
