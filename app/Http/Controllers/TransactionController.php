@@ -54,15 +54,15 @@ class TransactionController extends Controller
 
       if($data->count() > 0)   
       {
-          foreach($data as $row)
+          foreach($data as $key=> $row)
           {
              $output[] = $row->updated_by;
           }
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>array_values(array_filter($output)) ]);
       }else{
 
           $output[] = 'Record not Found';
-          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_values(array_filter($output))] ]]);
       } 
 	}
 
@@ -110,15 +110,15 @@ class TransactionController extends Controller
 
       if($data->count() > 0)   
       {
-          foreach($data as $row)
+          foreach($data as $key=> $row)
           {
              $output[] = $row->updated_by;
           }
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>array_values(array_filter($output)) ]);
       }else{
 
           $output[] = 'Record not Found';
-          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_values(array_filter($output))] ]]);
       } 
 	}
 
@@ -219,16 +219,16 @@ class TransactionController extends Controller
 
       if($data->count() > 0)   
       {
-          foreach($data as $row)
+          foreach($data as $key=> $row)
           {
              $output[] = $row->updated_by;
           }
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>array_values(array_filter($output)) ]);
       }else{
 
           $output[] = 'Record not Found';
-          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
-      }
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_values(array_filter($output))] ]]);
+      } 
 	}
 
 
@@ -274,16 +274,16 @@ class TransactionController extends Controller
 
       if($data->count() > 0)   
       {
-          foreach($data as $row)
+          foreach($data as $key=> $row)
           {
              $output[] = $row->updated_by;
           }
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>array_values(array_filter($output)) ]);
       }else{
 
           $output[] = 'Record not Found';
-          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
-      }
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_values(array_filter($output))] ]]);
+      } 
 	}
 
 }
