@@ -185,9 +185,11 @@ class nameParser{
                         $this->last = "";
                     }
                 }
+                //remove prefices
                 if($this->inArrayNorm($this->middle,$this->prefices)){
                     $this->middle = "";
                 }
+
                 // handle empty middle name
                 if(!$this->middle) // if middle is empty string
                 {
