@@ -45,31 +45,25 @@ class TransactionController extends Controller
            $daily_output[$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
       }
 
-      if($request->get('updated_by'))
+      $query = $request->get('updated_by');
+      $data = DB::table('travels')
+           ->where('updated_by', 'like', '%'.$query.'%')
+           ->get();
+    
+      $output = [];
+
+      if($data->count() > 0)   
       {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
+          foreach($data as $row)
           {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
+             $output[] = $row->updated_by;
           }
-        
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+      }else{
 
-      return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);  
+          $output[] = 'Record not Found';
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+      } 
 	}
 
 	
@@ -107,30 +101,25 @@ class TransactionController extends Controller
         
 	    }
 
-      if($request->get('updated_by'))
+      $query = $request->get('updated_by');
+      $data = DB::table('travels')
+           ->where('updated_by', 'like', '%'.$query.'%')
+           ->get();
+    
+      $output = [];
+
+      if($data->count() > 0)   
       {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
+          foreach($data as $row)
           {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
+             $output[] = $row->updated_by;
           }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+      }else{
 
-      return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
+          $output[] = 'Record not Found';
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+      } 
 	}
 
   
@@ -167,30 +156,25 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
 	    }
 
-      if($request->get('updated_by'))
+      $query = $request->get('updated_by');
+      $data = DB::table('travels')
+           ->where('updated_by', 'like', '%'.$query.'%')
+           ->get();
+    
+      $output = [];
+
+      if($data->count() > 0)   
       {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
+          foreach($data as $row)
           {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
+             $output[] = $row->updated_by;
           }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+      }else{
 
-      return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
+          $output[] = 'Record not Found';
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+      }
 	}
 
 
@@ -226,30 +210,25 @@ class TransactionController extends Controller
 	         $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
-	    if($request->get('updated_by'))
+	    $query = $request->get('updated_by');
+      $data = DB::table('travels')
+           ->where('updated_by', 'like', '%'.$query.'%')
+           ->get();
+    
+      $output = [];
+
+      if($data->count() > 0)   
       {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
+          foreach($data as $row)
           {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
+             $output[] = $row->updated_by;
           }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+      }else{
 
-      return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
+          $output[] = 'Record not Found';
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+      }
 	}
 
 
@@ -286,30 +265,25 @@ class TransactionController extends Controller
 	       $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
 	    }
 
-	    if($request->get('updated_by'))
+	   $query = $request->get('updated_by');
+      $data = DB::table('travels')
+           ->where('updated_by', 'like', '%'.$query.'%')
+           ->get();
+    
+      $output = [];
+
+      if($data->count() > 0)   
       {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
+          foreach($data as $row)
           {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
+             $output[] = $row->updated_by;
           }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=> array_filter($output) ]);
+      }else{
 
-      return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
+          $output[] = 'Record not Found';
+          return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[array_filter($output)] ]]);
+      }
 	}
 
 }
