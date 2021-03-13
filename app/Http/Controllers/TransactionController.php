@@ -55,10 +55,10 @@ class TransactionController extends Controller
       {
           foreach($data as $key=> $row)
           {
-             $output[][$key] = $row->updated_by;
+             $output[]= $row->updated_by;
           } 
-           $output_ = array_values(array_filter($output));
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>$output_ ]);
+
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>array_values(array_filter($output)) ]);
       }else{
 
           $output[] = 'Record not Found';
