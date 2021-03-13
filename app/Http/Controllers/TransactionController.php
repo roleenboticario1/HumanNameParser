@@ -372,7 +372,6 @@ class TransactionController extends Controller
               }
       }
 
-
       $daily_total = DB::table('travels')
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
