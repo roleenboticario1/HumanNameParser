@@ -24,7 +24,7 @@ class TransactionController extends Controller
       $updated_by_Array = [$updated_by];
       }
     
-      $total = Db::table('travels')
+      $total = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -38,7 +38,7 @@ class TransactionController extends Controller
            $total_output[$entry->ACTIVITY] = $entry->COUNT;
       }
 
-      $daily = Db::table('travels')
+      $daily = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -70,7 +70,7 @@ class TransactionController extends Controller
       $updated_by_Array = [$updated_by];
       }
 
-      $total = Db::table('travels')
+      $total = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -84,7 +84,7 @@ class TransactionController extends Controller
            $total_output[$entry->ACTIVITY][" ".$entry->GENDER] = $entry->COUNT;
       }
 
-      $daily = Db::table('travels')
+      $daily = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -119,7 +119,7 @@ class TransactionController extends Controller
       }
     
 
-      $total = Db::table('travels')
+      $total = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -133,7 +133,7 @@ class TransactionController extends Controller
          $total_output[$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
       }
 
-      $daily = Db::table('travels')
+      $daily = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -164,7 +164,7 @@ class TransactionController extends Controller
       $updated_by_Array = [$updated_by];
       }
 
-      $total = Db::table('travels')
+      $total = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -178,7 +178,7 @@ class TransactionController extends Controller
          $total_output[$entry->NAME] = $entry->COUNT;
       }
 
-      $daily = Db::table('travels')
+      $daily = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -211,7 +211,7 @@ class TransactionController extends Controller
       }
     
 
-      $total = Db::table('travels')
+      $total = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -225,7 +225,7 @@ class TransactionController extends Controller
            $total_output[$entry->NAME] = $entry->COUNT;
       }
 
-      $daily = Db::table('travels')
+      $daily = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -255,7 +255,7 @@ class TransactionController extends Controller
       $updated_by_Array = [$updated_by];
       }
     
-      $total = Db::table('travels')
+      $total = DB::table('travels')
          ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -270,7 +270,7 @@ class TransactionController extends Controller
           $total_output [$entry->NATIONALITY][$entry->ENTRY]= $entry->COUNT;
       }
 
-      $total_daily = Db::table('travels')
+      $total_daily = DB::table('travels')
          ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -302,7 +302,7 @@ class TransactionController extends Controller
       $updated_by_Array = [$updated_by];
       }
   
-      $total = Db::table('travels')
+      $total = DB::table('travels')
          ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -335,6 +335,77 @@ class TransactionController extends Controller
 
       return response()->json(['total' => $total_output,'daily'=>[$daily_output] ]);
   }
+
+
+  public function getTotalCountEntryPortAndExitPortByNationality(Request $request)
+  {
+      $start = Carbon::parse($request->date_from)->format('Y-m-d');
+      $end = Carbon::parse($request->date_to)->format('Y-m-d');
+
+      $total = DB::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), 
+                  DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
+                 ('travels.travels_port_of_exit AS EXIT'))
+          ->groupBy('NATIONALITY','ENTRY')
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+       $total_ = DB::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
+                 ('travels.travels_port_of_exit AS EXIT'))
+          ->groupBy('NATIONALITY','EXIT')
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+      $total_output  = [];
+      foreach ( $total as $entry) {
+          $total_output [$entry->NATIONALITY]["Enrty Port"][$entry->ENTRY]= $entry->ENT;
+              foreach($total_ as $entries)
+              {
+                 $total_output [$entries->NATIONALITY]["Exit Port"][$entries->EXIT]= $entry->EXT;
+              }
+      }
+
+
+      $daily_total = DB::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('travels.travels_date_of_visit AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), 
+                  DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
+                 ('travels.travels_port_of_exit AS EXIT'))
+          ->groupBy('DATE','NATIONALITY','ENTRY')
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+       $daily_total_ = DB::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('travels.travels_date_of_visit AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
+                 ('travels.travels_port_of_exit AS EXIT'))
+          ->groupBy('DATE','NATIONALITY','EXIT')
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+      $daily_output  = [];
+      foreach ( $daily_total as $entry) {
+          $daily_output[$entry->DATE][$entry->NATIONALITY]["Enrty Port"][$entry->ENTRY]= $entry->ENT;
+              foreach($daily_total_ as $entries)
+              {
+                 $daily_output[$entries->DATE][$entries->NATIONALITY]["Exit Port"][$entries->EXIT]= $entry->EXT;
+              }
+      }
+
+      return response()->json(['total' => $total_output , 'daily'=>[$daily_output] ]);
+  }
+  
 
 }
 
