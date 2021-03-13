@@ -16,7 +16,6 @@ class TransactionController extends Controller
   { 
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end   = Carbon::parse($request->date_to)->format('Y-m-d');
-      $query = $request->get('updated_by');
 
       $total = Db::table('travels')
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
@@ -56,9 +55,10 @@ class TransactionController extends Controller
       {
           foreach($data as $key=> $row)
           {
-             $output[] = $row->updated_by;
-          }
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>array_values(array_filter($output)) ]);
+             $output[][$key] = $row->updated_by;
+          } 
+           $output_ = array_values(array_filter($output));
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], 'officer'=>$output_ ]);
       }else{
 
           $output[] = 'Record not Found';
