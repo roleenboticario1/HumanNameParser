@@ -293,7 +293,6 @@ class TransactionController extends Controller
   {
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end = Carbon::parse($request->date_to)->format('Y-m-d');
-
       $updated_by = $request->input('updated_by');
 
       if($updated_by == "") {
@@ -341,8 +340,17 @@ class TransactionController extends Controller
   {
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end = Carbon::parse($request->date_to)->format('Y-m-d');
+      $updated_by = $request->input('updated_by');
+
+
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
 
       $total = DB::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
@@ -354,6 +362,7 @@ class TransactionController extends Controller
          ->get();
 
        $total_ = DB::table('travels')
+         ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
@@ -373,10 +382,11 @@ class TransactionController extends Controller
       }
 
       $daily_total = DB::table('travels')
+         ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
-         ->select(DB::raw('travels.travels_date_of_visit AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), 
+         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), 
                   DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
                  ('travels.travels_port_of_exit AS EXIT'))
           ->groupBy('DATE','NATIONALITY','ENTRY')
@@ -384,10 +394,11 @@ class TransactionController extends Controller
          ->get();
 
        $daily_total_ = DB::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
-         ->select(DB::raw('travels.travels_date_of_visit AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
+         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
                  ('travels.travels_port_of_exit AS EXIT'))
           ->groupBy('DATE','NATIONALITY','EXIT')
          ->orderBy('travels.travels_date_of_visit', 'DESC')
