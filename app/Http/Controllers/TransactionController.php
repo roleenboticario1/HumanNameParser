@@ -16,8 +16,16 @@ class TransactionController extends Controller
   { 
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end   = Carbon::parse($request->date_to)->format('Y-m-d');
+      $updated_by = $request->input('updated_by');
 
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
+    
       $total = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -31,6 +39,7 @@ class TransactionController extends Controller
       }
 
       $daily = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -44,29 +53,6 @@ class TransactionController extends Controller
            $daily_output[$entry->DATE][$entry->ACTIVITY] = $entry->COUNT;
       }
 
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
-
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
   }
 
@@ -76,8 +62,16 @@ class TransactionController extends Controller
        
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end   = Carbon::parse($request->date_to)->format('Y-m-d');
+      $updated_by = $request->input('updated_by');
+
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
 
       $total = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -91,6 +85,7 @@ class TransactionController extends Controller
       }
 
       $daily = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -105,29 +100,6 @@ class TransactionController extends Controller
         
       }
 
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
-
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
   }
 
@@ -138,7 +110,17 @@ class TransactionController extends Controller
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end   = Carbon::parse($request->date_to)->format('Y-m-d');
 
+      $updated_by = $request->input('updated_by');
+
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
+    
+
       $total = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -152,6 +134,7 @@ class TransactionController extends Controller
       }
 
       $daily = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -165,29 +148,6 @@ class TransactionController extends Controller
            $daily_output[$entry->DATE][$entry->ACTIVITY][$entry->NATIONALITY] = $entry->COUNT;
       }
 
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
-
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
   }
 
@@ -196,8 +156,16 @@ class TransactionController extends Controller
   {
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end   = Carbon::parse($request->date_to)->format('Y-m-d');
+      $updated_by = $request->input('updated_by');
+
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
 
       $total = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -211,6 +179,7 @@ class TransactionController extends Controller
       }
 
       $daily = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -224,29 +193,6 @@ class TransactionController extends Controller
            $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
       }
 
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
-
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
   }
 
@@ -256,8 +202,17 @@ class TransactionController extends Controller
 
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end   = Carbon::parse($request->date_to)->format('Y-m-d');
+      $updated_by = $request->input('updated_by');
+
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
+    
 
       $total = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -271,6 +226,7 @@ class TransactionController extends Controller
       }
 
       $daily = Db::table('travels')
+        ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
         ->whereDate('travels.travels_date_of_visit', '<=', $end)
         ->join('profiles','travels.profile_id','=','profiles.profile_id')
@@ -284,29 +240,6 @@ class TransactionController extends Controller
          $daily_output[$entry->DATE][$entry->NAME] = $entry->COUNT;
       }
 
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
-
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
   }
 
@@ -314,9 +247,16 @@ class TransactionController extends Controller
   {
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end = Carbon::parse($request->date_to)->format('Y-m-d');
- 
+      $updated_by = $request->input('updated_by');
 
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
+    
       $total = Db::table('travels')
+         ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
@@ -331,6 +271,7 @@ class TransactionController extends Controller
       }
 
       $total_daily = Db::table('travels')
+         ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
@@ -344,29 +285,6 @@ class TransactionController extends Controller
           $daily_output[$entry->DATE][$entry->NATIONALITY][$entry->ENTRY]= $entry->COUNT;
 
       }
-
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
       
       return response()->json(['total' => $total_output,'daily'=>[$daily_output] ]);
   }
@@ -375,9 +293,17 @@ class TransactionController extends Controller
   {
       $start = Carbon::parse($request->date_from)->format('Y-m-d');
       $end = Carbon::parse($request->date_to)->format('Y-m-d');
- 
 
+      $updated_by = $request->input('updated_by');
+
+      if($updated_by == "") {
+      $updated_by_Array = [0, 1];
+      } else {
+      $updated_by_Array = [$updated_by];
+      }
+  
       $total = Db::table('travels')
+         ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
@@ -392,6 +318,7 @@ class TransactionController extends Controller
       }
 
       $total_daily = Db::table('travels')
+         ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
@@ -406,31 +333,8 @@ class TransactionController extends Controller
 
       }
 
-      if($request->get('updated_by'))
-      {
-          $query = $request->get('updated_by');
-          $data = DB::table('travels')
-               ->where('updated_by', 'like', '%'.$query.'%')
-               ->get();
-        
-          $output = [];
-
-          if($data->count() > 0)   
-          {
-              foreach($data as $row)
-          {
-              $output[] = $row->updated_by;
-          }
-              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          }else{
-            
-             $output[] = 'Record not Found';
-             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
-          } 
-      }
-      
       return response()->json(['total' => $total_output,'daily'=>[$daily_output] ]);
   }
-  
+
 }
 
