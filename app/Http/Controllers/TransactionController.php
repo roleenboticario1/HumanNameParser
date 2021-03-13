@@ -310,4 +310,127 @@ class TransactionController extends Controller
       return response()->json(["activity" =>$total_output , "daily"=>[$daily_output]]);
   }
 
+  public function getTotalCountEntryPortByNationality(Request $request)
+  {
+      $start = Carbon::parse($request->date_from)->format('Y-m-d');
+      $end = Carbon::parse($request->date_to)->format('Y-m-d');
+ 
+
+      $total = Db::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), DB::raw('COUNT(travels.travels_port_of_entry) AS COUNT'))
+         ->groupBy(['NATIONALITY','ENTRY'])
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+      $total_output  = [];
+      foreach ( $total as $entry) {
+          $total_output [$entry->NATIONALITY][$entry->ENTRY]= $entry->COUNT;
+      }
+
+      $total_daily = Db::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), DB::raw('profiles.profile_nationality AS NATIONALITY'),DB::raw('travels.travels_port_of_entry AS ENTRY'), DB::raw('COUNT(travels.travels_port_of_entry) AS COUNT'))
+         ->groupBy('DATE','NATIONALITY','ENTRY')
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+      $daily_output = [];
+      foreach ( $total_daily as $entry) {
+          $daily_output[$entry->DATE][$entry->NATIONALITY][$entry->ENTRY]= $entry->COUNT;
+
+      }
+
+      if($request->get('updated_by'))
+      {
+          $query = $request->get('updated_by');
+          $data = DB::table('travels')
+               ->where('updated_by', 'like', '%'.$query.'%')
+               ->get();
+        
+          $output = [];
+
+          if($data->count() > 0)   
+          {
+              foreach($data as $row)
+          {
+              $output[] = $row->updated_by;
+          }
+              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
+          }else{
+            
+             $output[] = 'Record not Found';
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
+          } 
+      }
+      
+      return response()->json(['total' => $total_output,'daily'=>[$daily_output] ]);
+  }
+
+  public function getTotalCountExitPortByNationality(Request $request)
+  {
+      $start = Carbon::parse($request->date_from)->format('Y-m-d');
+      $end = Carbon::parse($request->date_to)->format('Y-m-d');
+ 
+
+      $total = Db::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_exit AS EXIT'), DB::raw('COUNT(travels.travels_port_of_exit) AS COUNT'))
+         ->groupBy(['NATIONALITY','EXIT'])
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+      $total_output  = [];
+      foreach ( $total as $entry) {
+          $total_output [$entry->NATIONALITY][$entry->EXIT]= $entry->COUNT;
+      }
+
+      $total_daily = Db::table('travels')
+         ->whereDate('travels.travels_date_of_visit', '>=', $start)
+         ->whereDate('travels.travels_date_of_visit', '<=', $end)
+         ->join('profiles','travels.profile_id','profiles.profile_id')
+         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'), DB::raw('profiles.profile_nationality AS NATIONALITY'),DB::raw('travels.travels_port_of_exit AS ENTRY'), DB::raw('COUNT(travels.travels_port_of_exit) AS COUNT'))
+         ->groupBy('DATE','NATIONALITY','ENTRY')
+         ->orderBy('travels.travels_date_of_visit', 'DESC')
+         ->get();
+
+      $daily_output = [];
+      foreach ( $total_daily as $entry) {
+          $daily_output[$entry->DATE][$entry->NATIONALITY][$entry->ENTRY]= $entry->COUNT;
+
+      }
+
+      if($request->get('updated_by'))
+      {
+          $query = $request->get('updated_by');
+          $data = DB::table('travels')
+               ->where('updated_by', 'like', '%'.$query.'%')
+               ->get();
+        
+          $output = [];
+
+          if($data->count() > 0)   
+          {
+              foreach($data as $row)
+          {
+              $output[] = $row->updated_by;
+          }
+              return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
+          }else{
+            
+             $output[] = 'Record not Found';
+             return response()->json(["activity" =>$total_output , "daily"=>[$daily_output], ['officer'=>[$output] ]]);
+          } 
+      }
+      
+      return response()->json(['total' => $total_output,'daily'=>[$daily_output] ]);
+  }
+  
 }
+
