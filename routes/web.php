@@ -40,3 +40,4 @@ $router->post('get-total-count-exit-port-by-nationality','TransactionController@
 
 //BOTH ENTRY_PORT AND EXIT_PORT BY NATIONALITY
 $router->post('get-total-count-enrty-exit-port-by-nationality','TransactionController@getTotalCountEntryPortAndExitPortByNationality');
+

@@ -210,7 +210,6 @@ class TransactionController extends Controller
       $updated_by_Array = [$updated_by];
       }
     
-
       $total = DB::table('travels')
         ->whereIn('travels.updated_by', $updated_by_Array)
         ->whereDate('travels.travels_date_of_visit', '>=', $start)
@@ -374,7 +373,7 @@ class TransactionController extends Controller
           $total_output [$entry->NATIONALITY]["Enrty Port"][$entry->ENTRY]= $entry->ENT;
               foreach($total_ as $entries)
               {
-                 $total_output [$entries->NATIONALITY]["Exit Port"][$entries->EXIT]= $entry->EXT;
+                 $total_output [$entries->NATIONALITY]["Exit Port"][$entries->EXIT]= $entries->EXT;
               }
       }
 
@@ -403,7 +402,7 @@ class TransactionController extends Controller
           $daily_output[$entry->DATE][$entry->NATIONALITY]["Enrty Port"][$entry->ENTRY]= $entry->ENT;
               foreach($daily_total_ as $entries)
               {
-                 $daily_output[$entries->DATE][$entries->NATIONALITY]["Exit Port"][$entries->EXIT]= $entry->EXT;
+                 $daily_output[$entries->DATE][$entries->NATIONALITY]["Exit Port"][$entries->EXIT]= $entries->EXT;
               }
       }
 
