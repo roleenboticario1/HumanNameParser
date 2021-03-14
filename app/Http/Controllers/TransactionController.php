@@ -316,7 +316,7 @@ class TransactionController extends Controller
           $total_output [$entry->NATIONALITY][$entry->EXIT]= $entry->COUNT;
       }
 
-      $total_daily = Db::table('travels')
+      $total_daily = DB::table('travels')
          ->whereIn('travels.updated_by', $updated_by_Array)
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
@@ -354,9 +354,7 @@ class TransactionController extends Controller
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
-         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), 
-                  DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
-                 ('travels.travels_port_of_exit AS EXIT'))
+         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'),DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),('travels.travels_port_of_exit AS EXIT'))
           ->groupBy('NATIONALITY','ENTRY')
          ->orderBy('travels.travels_date_of_visit', 'DESC')
          ->get();
@@ -366,8 +364,7 @@ class TransactionController extends Controller
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
-         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
-                 ('travels.travels_port_of_exit AS EXIT'))
+         ->select(DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),('travels.travels_port_of_exit AS EXIT'))
           ->groupBy('NATIONALITY','EXIT')
          ->orderBy('travels.travels_date_of_visit', 'DESC')
          ->get();
@@ -386,9 +383,7 @@ class TransactionController extends Controller
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
-         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), 
-                  DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
-                 ('travels.travels_port_of_exit AS EXIT'))
+         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), ('travels.travels_port_of_entry AS ENTRY'), DB::raw('COUNT(travels.travels_port_of_entry) AS ENT'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),('travels.travels_port_of_exit AS EXIT'))
           ->groupBy('DATE','NATIONALITY','ENTRY')
          ->orderBy('travels.travels_date_of_visit', 'DESC')
          ->get();
@@ -398,8 +393,7 @@ class TransactionController extends Controller
          ->whereDate('travels.travels_date_of_visit', '>=', $start)
          ->whereDate('travels.travels_date_of_visit', '<=', $end)
          ->join('profiles','travels.profile_id','profiles.profile_id')
-         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'),
-                 ('travels.travels_port_of_exit AS EXIT'))
+         ->select(DB::raw('DATE(travels.travels_date_of_visit) AS DATE'),DB::raw('profiles.profile_nationality AS NATIONALITY'), DB::raw('COUNT(travels.travels_port_of_exit) AS EXT'), ('travels.travels_port_of_exit AS EXIT'))
           ->groupBy('DATE','NATIONALITY','EXIT')
          ->orderBy('travels.travels_date_of_visit', 'DESC')
          ->get();

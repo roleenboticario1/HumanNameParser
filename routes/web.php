@@ -32,8 +32,11 @@ $router->post('get-total-count-of-travels-port-of-exit','TransactionController@g
 
 //Total Count of Entry and Exit With Gender
 $router->post('get-total-count-by-gender','TransactionController@getTotalCountByGender');
+
+//ENTRY_PORT BY NATIONALITY
 $router->post('get-total-count-entry-port-by-nationality','TransactionController@getTotalCountEntryPortByNationality');
+// EXIT_PORT BY NATIONALITY
 $router->post('get-total-count-exit-port-by-nationality','TransactionController@getTotalCountExitPortByNationality');
 
-//BTH ENTRY_PORT AND EXIT_PORT BY NATIONALITY
+//BOTH ENTRY_PORT AND EXIT_PORT BY NATIONALITY
 $router->post('get-total-count-enrty-exit-port-by-nationality','TransactionController@getTotalCountEntryPortAndExitPortByNationality');
